@@ -103,7 +103,7 @@ class IRI extends Base {
 
         const myPeers = peers.filter((peer) => {
             if (this.isStaticNeighbor(peer)) {
-                this.log(`WARNING: trying to remove a static neighbor. Skipping: ${peer.getUDPURI()}`.yellow);
+                this.log(`WARNING: trying to remove a static neighbor. Skipping: ${peer.getTCPURI()}`.yellow);
                 return false;
             }
             return true;
@@ -113,14 +113,14 @@ class IRI extends Base {
             return Promise.resolve([]);
         }
 
-        const uris = myPeers.map((p) => p.getUDPURI());
+        const uris = myPeers.map((p) => p.getTCPURI());
         return new Promise ((resolve, reject) => {
             this.api.removeNeighbors(uris, (err) => {
                 if (err) {
                     reject(err);
                     return;
                 }
-                this.log('Neighbors removed (if there were any):'.red, myPeers.map(p => p.getUDPURI()));
+                this.log('Neighbors removed (if there were any):'.red, myPeers.map(p => p.getTCPURI()));
                 resolve(peers)
             });
         });
@@ -136,7 +136,7 @@ class IRI extends Base {
             return Promise.reject();
         }
 
-        const uris = peers.map((p) => p.getUDPURI());
+        const uris = peers.map((p) => p.getTCPURI());
 
         return new Promise((resolve, reject) => {
             this.api.addNeighbors(uris, (error, data) => {
